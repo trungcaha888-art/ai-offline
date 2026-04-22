@@ -26,6 +26,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1961041421163688');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1961041421163688&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -967,8 +984,203 @@
     </div>
   </footer>
 
+  <!-- SUCCESS POPUP -->
+  <div class="popup-overlay" id="popup-overlay">
+    <div class="popup-box">
+      <button class="popup-close" id="popup-close">&times;</button>
+      <div class="popup-stripe-bar"></div>
+      <h2 class="popup-title">🎉 ĐĂNG KÝ THÀNH CÔNG!</h2>
+      <p class="popup-desc">Cảm ơn bạn đã đăng ký tư vấn <strong>AI Business System</strong>.<br>Đội ngũ của chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất.</p>
+      <a href="https://zalo.me/g/sfajnp742" target="_blank" class="popup-zalo-btn">
+        <span class="popup-arrow-left">←</span>
+        VÀO NHÓM ZALO NHẬN TÀI LIỆU
+        <span class="popup-arrow-right">→</span>
+      </a>
+      <p class="popup-link-label">Link nhóm Zalo</p>
+      <a href="https://zalo.me/g/sfajnp742" target="_blank" class="popup-link-url">https://zalo.me/g/sfajnp742</a>
+      <p class="popup-warning">⚠️ <strong>Vào nhóm ZALO ngay</strong> để nhận tài liệu + lịch tư vấn chi tiết. Nhóm sẽ đóng sau:</p>
+      <div class="popup-countdown">
+        <span class="countdown-num" id="popup-countdown-min">02</span>
+        <span class="countdown-num" id="popup-countdown-sec">00</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script>
+    // ============================
+    // AUTOCAPTURE & AUTOFILL LOGIC
+    // ============================
+    function setRootCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      const hostParts = window.location.hostname.split('.');
+      let rootDomain = window.location.hostname;
+      if (hostParts.length > 2) {
+        rootDomain = hostParts.slice(-2).join('.');
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=." + rootDomain;
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    function autoFillAllForms() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let savedName = urlParams.get('name') || '';
+      let savedEmail = urlParams.get('email') || '';
+      let savedPhone = urlParams.get('phone') || '';
+
+      if (!savedName) {
+        let tmp = localStorage.getItem('user_name') || getCookie('user_name');
+        if (tmp) try { savedName = decodeURIComponent(tmp); } catch(e) { savedName = tmp; }
+      }
+      if (!savedEmail) {
+        let tmp = localStorage.getItem('user_email') || getCookie('user_email');
+        if (tmp) try { savedEmail = decodeURIComponent(tmp); } catch(e) { savedEmail = tmp; }
+      }
+      if (!savedPhone) {
+        let tmp = localStorage.getItem('user_phone') || getCookie('user_phone');
+        if (tmp) try { savedPhone = decodeURIComponent(tmp); } catch(e) { savedPhone = tmp; }
+      }
+
+      if (savedName || savedEmail || savedPhone) {
+        // Form Section 2
+        const nameEl = document.getElementById('formName');
+        const emailEl = document.getElementById('formEmail');
+        const phoneEl = document.getElementById('formPhone');
+        if (savedName && nameEl && !nameEl.value) nameEl.value = savedName;
+        if (savedEmail && emailEl && !emailEl.value) emailEl.value = savedEmail;
+        if (savedPhone && phoneEl && !phoneEl.value) phoneEl.value = savedPhone;
+
+        // Form Section 16
+        const s16NameEl = document.getElementById('s16Name');
+        const s16EmailEl = document.getElementById('s16Email');
+        const s16PhoneEl = document.getElementById('s16Phone');
+        if (savedName && s16NameEl && !s16NameEl.value) s16NameEl.value = savedName;
+        if (savedEmail && s16EmailEl && !s16EmailEl.value) s16EmailEl.value = savedEmail;
+        if (savedPhone && s16PhoneEl && !s16PhoneEl.value) s16PhoneEl.value = savedPhone;
+      }
+    }
+
+    // ============================
+    // UTM PARAMETERS
+    // ============================
+    function getUtmParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || ''
+      };
+    }
+
+    const utmData = getUtmParams();
+
+    // ============================
+    // GOOGLE SHEET URL
+    // ============================
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyRoMncjTdBTBjcbbCCleaZ-EUFURG7YYgtkrR1Ijjf4Tc37it8xW0D834EVSZfbt2A/exec';
+
+    // ============================
+    // GỬI DATA QUA HIDDEN IFRAME (BYPASS CORS 100%)
+    // ============================
+    function sendToGoogleSheet(data) {
+      return new Promise((resolve) => {
+        const iframeName = 'hidden-iframe-' + Date.now();
+        const iframe = document.createElement('iframe');
+        iframe.name = iframeName;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        const hiddenForm = document.createElement('form');
+        hiddenForm.method = 'POST';
+        hiddenForm.action = SHEET_URL;
+        hiddenForm.target = iframeName;
+        hiddenForm.style.display = 'none';
+
+        for (const [key, value] of Object.entries(data)) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          hiddenForm.appendChild(input);
+        }
+
+        document.body.appendChild(hiddenForm);
+        hiddenForm.submit();
+
+        setTimeout(() => {
+          iframe.remove();
+          hiddenForm.remove();
+          resolve();
+        }, 3000);
+      });
+    }
+
+    // ============================
+    // POPUP FUNCTIONS
+    // ============================
+    const popupOverlay = document.getElementById('popup-overlay');
+    const popupClose = document.getElementById('popup-close');
+    let popupCountdownInterval;
+
+    function showPopup() {
+      popupOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      startPopupCountdown();
+    }
+
+    function closePopup() {
+      popupOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      clearInterval(popupCountdownInterval);
+    }
+
+    function startPopupCountdown() {
+      let totalSeconds = 120;
+      clearInterval(popupCountdownInterval);
+      updatePopupCountdown(totalSeconds);
+      popupCountdownInterval = setInterval(() => {
+        totalSeconds--;
+        if (totalSeconds <= 0) {
+          clearInterval(popupCountdownInterval);
+          totalSeconds = 0;
+        }
+        updatePopupCountdown(totalSeconds);
+      }, 1000);
+    }
+
+    function updatePopupCountdown(totalSeconds) {
+      const min = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      const sec = (totalSeconds % 60).toString().padStart(2, '0');
+      const minEl = document.getElementById('popup-countdown-min');
+      const secEl = document.getElementById('popup-countdown-sec');
+      if (minEl) minEl.textContent = min;
+      if (secEl) secEl.textContent = sec;
+    }
+
+    popupClose.addEventListener('click', closePopup);
+    popupOverlay.addEventListener('click', function(e) {
+      if (e.target === popupOverlay) closePopup();
+    });
+
     // ============ PARTICLES ============
     function createParticles() {
       const container = document.getElementById('heroParticles');
@@ -1005,6 +1217,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       createParticles();
       initScrollAnimations();
+      autoFillAllForms();
 
       // Entrance animations
       setTimeout(() => document.body.classList.add('loaded'), 100);
@@ -1049,34 +1262,60 @@
       }
       startS16Countdown();
 
-      // ============ FORM SUBMISSION → GOOGLE SHEET ============
-      const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyRoMncjTdBTBjcbbCCleaZ-EUFURG7YYgtkrR1Ijjf4Tc37it8xW0D834EVSZfbt2A/exec';
+      // ============ FORM HANDLER (cả 2 form) ============
+      async function handleFormSubmit(formEl, nameId, emailId, phoneId, btn, originalText) {
+        const name = document.getElementById(nameId).value.trim();
+        const email = document.getElementById(emailId).value.trim();
+        const phone = document.getElementById(phoneId).value.trim();
 
-      async function submitToSheet(data, btn, originalText) {
+        if (!name || !email || !phone) return;
+
+        // --- SAVE AUTOCAPTURE DATA ---
+        localStorage.setItem('user_name', encodeURIComponent(name));
+        localStorage.setItem('user_email', encodeURIComponent(email));
+        localStorage.setItem('user_phone', encodeURIComponent(phone));
+
+        setRootCookie('user_name', encodeURIComponent(name), 365);
+        setRootCookie('user_email', encodeURIComponent(email), 365);
+        setRootCookie('user_phone', encodeURIComponent(phone), 365);
+        // -----------------------------
+
+        // Loading state
         btn.disabled = true;
-        btn.textContent = 'Đang gửi...';
+        btn.textContent = 'ĐANG GỬI...';
+        btn.style.opacity = '0.7';
+
         try {
-          await fetch(SHEET_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+          await sendToGoogleSheet({
+            name: name,
+            email: email,
+            phone: phone,
+            timestamp: new Date().toLocaleString('vi-VN'),
+            link_utm: window.location.href,
+            source: utmData.utm_source
           });
-          btn.textContent = '✓ Đăng ký thành công!';
-          btn.style.background = '#22c55e';
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-          }, 4000);
         } catch (err) {
-          btn.textContent = '✗ Lỗi, thử lại!';
-          btn.style.background = '#ef4444';
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-          }, 3000);
+          console.log('Lỗi gửi:', err);
+        }
+
+        // Reset form & button
+        formEl.reset();
+        btn.textContent = '✓ Đăng ký thành công!';
+        btn.style.background = '#22c55e';
+        btn.style.opacity = '1';
+
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 4000);
+
+        // Hiện popup thành công
+        showPopup();
+
+        // Fire Meta Pixel Lead event (nếu có)
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'Lead');
         }
       }
 
@@ -1086,13 +1325,7 @@
         form1.addEventListener('submit', function(e) {
           e.preventDefault();
           const btn = document.getElementById('formSubmit');
-          submitToSheet({
-            name: document.getElementById('formName').value,
-            email: document.getElementById('formEmail').value,
-            phone: document.getElementById('formPhone').value,
-            link_utm: window.location.href
-          }, btn, 'ĐĂNG KÝ TƯ VẤN NGAY');
-          form1.reset();
+          handleFormSubmit(form1, 'formName', 'formEmail', 'formPhone', btn, 'ĐĂNG KÝ TƯ VẤN NGAY');
         });
       }
 
@@ -1103,13 +1336,7 @@
         form2.addEventListener('submit', function(e) {
           e.preventDefault();
           const btn = document.getElementById('s16Submit');
-          submitToSheet({
-            name: document.getElementById('s16Name').value,
-            email: document.getElementById('s16Email').value,
-            phone: document.getElementById('s16Phone').value,
-            link_utm: window.location.href
-          }, btn, 'ĐĂNG KÝ TƯ VẤN NGAY');
-          form2.reset();
+          handleFormSubmit(form2, 's16Name', 's16Email', 's16Phone', btn, 'ĐĂNG KÝ TƯ VẤN NGAY');
         });
       }
     });
